@@ -41,16 +41,6 @@ object DeployTest : BuildType({
     vcs {
         root(DslContext.settingsRoot)
     }
-
-    steps {
-        dockerCommand {
-            name = "PushToDockerHub"
-            id = "PushToDockerHub"
-            commandType = push {
-                namesAndTags = "springdocker:latest"
-            }
-        }
-    }
 })
 
 object Docker : Template({

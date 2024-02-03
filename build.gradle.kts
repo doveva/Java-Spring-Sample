@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
     java
     id("org.springframework.boot") version "3.2.2"
@@ -14,9 +16,15 @@ java {
 repositories {
     mavenCentral()
 }
+tasks.named<BootJar>("bootJar"){
+    archiveClassifier.set("boot")
+    this.archiveFileName.set("${archiveBaseName.get()}.${archiveExtension.get()}")
+}
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-rest")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

@@ -3,6 +3,7 @@ import jetbrains.buildServer.configs.kotlin.buildSteps.DockerCommandStep
 import jetbrains.buildServer.configs.kotlin.buildSteps.dockerCommand
 import jetbrains.buildServer.configs.kotlin.buildSteps.gradle
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
+import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -32,11 +33,11 @@ project {
     description = "Test Java pipeline"
     sequential{
         buildType(Build)
-        buildType(Deploy)
         parallel {
             buildType(TestFront)
             buildType(BackendTest)
         }
+        buildType(Deploy)
     }
     template(Docker)
 }
@@ -103,6 +104,10 @@ object Deploy: BuildType({
                 id = "script run"
                 scriptContent = """echo "Runner False step!""""
             }
+        }
+    }
+    triggers{
+        vcs {
         }
     }
 })

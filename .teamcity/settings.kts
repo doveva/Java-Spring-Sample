@@ -46,7 +46,7 @@ object DeployTest : BuildType({
     steps {
         gradle {
             id = "gradle_runner"
-            tasks = "clean build"
+            tasks = "bootJar"
         }
     }
 })

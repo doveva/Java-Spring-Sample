@@ -2,6 +2,7 @@ import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildSteps.DockerCommandStep
 import jetbrains.buildServer.configs.kotlin.buildSteps.dockerCommand
 import jetbrains.buildServer.configs.kotlin.buildSteps.gradle
+import jetbrains.buildServer.configs.kotlin.buildSteps.script
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -39,6 +40,10 @@ object DeployTest : BuildType({
     name = "Deploy Test"
     description = "First Deploy for java project"
 
+    params{
+        param("TestVar", "true")
+    }
+
     vcs {
         root(DslContext.settingsRoot)
     }
@@ -47,6 +52,18 @@ object DeployTest : BuildType({
         gradle {
             id = "gradle_runner"
             tasks = "bootJar"
+        }
+        if ("%TestVar%" == "true"){
+            script {
+                id = "script run"
+                scriptContent = """echo "Runner True step!""""
+            }
+        }
+        else{
+            script {
+                id = "script run"
+                scriptContent = """echo "Runner False step!""""
+            }
         }
     }
 })

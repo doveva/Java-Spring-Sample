@@ -115,7 +115,7 @@ object DeployQA: BuildType({
 })
 
 object DeployProd: BuildType({
-    name = "Deploy to QA"
+    name = "Deploy to Prod"
 
     vcs {
         root(DslContext.settingsRoot)

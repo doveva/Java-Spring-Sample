@@ -34,14 +34,26 @@ project {
     buildType(Build)
     buildType(TestFront)
     buildType(BackendTest)
-    buildType(Deploy)
+    buildType(DeployQA)
+    buildType(DeployProd)
+
+
+    params{
+        param("QaDeploy", "true")
+    }
     sequential{
         buildType(Build)
         parallel {
             buildType(TestFront)
             buildType(BackendTest)
         }
-        buildType(Deploy)
+        if("true" == "%QaDeploy%"){
+            buildType(DeployQA)
+        }
+        else{
+            buildType(DeployProd)
+        }
+        buildType(Finalize)
     }
     template(Docker)
 }
@@ -88,26 +100,44 @@ object BackendTest: BuildType({
     }
 })
 
-object Deploy: BuildType({
-    name = "Deploy"
-    params {
-        param("TestVar", "true")
-    }
+object DeployQA: BuildType({
+    name = "Deploy to QA"
+
     vcs {
         root(DslContext.settingsRoot)
     }
     steps{
-        if ("true" == "%TestVar%"){
             script {
                 id = "script run"
-                scriptContent = """echo "Runner True step!""""
+                scriptContent = """echo "Deployed to QA!""""
             }
+    }
+})
+
+object DeployProd: BuildType({
+    name = "Deploy to QA"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+    steps{
+        script {
+            id = "script run"
+            scriptContent = """echo "Deployed to Prod!""""
         }
-        else{
-            script {
-                id = "script run"
-                scriptContent = """echo "Runner False step!""""
-            }
+    }
+})
+
+object Finalize: BuildType({
+    name = "Deploy Notifications"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+    steps{
+        script {
+            id = "script run"
+            scriptContent = """echo "Pipeline finished!""""
         }
     }
     triggers{

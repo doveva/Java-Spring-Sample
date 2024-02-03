@@ -36,10 +36,10 @@ project {
     buildType(BackendTest)
     buildType(DeployQA)
     buildType(DeployProd)
-
+    buildType(Finalize)
 
     params{
-        param("QaDeploy", "true")
+        param("QaDeploy", "false")
     }
     sequential{
         buildType(Build)

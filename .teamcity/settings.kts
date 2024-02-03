@@ -30,19 +30,20 @@ version = "2023.11"
 
 project {
     description = "Test Java pipeline"
-
-    buildType(DeployTest)
-
+    sequential{
+        buildType(Build)
+        buildType(Deploy)
+        parallel {
+            buildType(TestFront)
+            buildType(BackendTest)
+        }
+    }
     template(Docker)
 }
 
-object DeployTest : BuildType({
-    name = "Deploy Test"
-    description = "First Deploy for java project"
-
-    params{
-        param("TestVar", "true")
-    }
+object Build : BuildType({
+    name = "Build Test"
+    description = "First Build config for java project"
 
     vcs {
         root(DslContext.settingsRoot)
@@ -53,7 +54,45 @@ object DeployTest : BuildType({
             id = "gradle_runner"
             tasks = "bootJar"
         }
-        if ("%TestVar%" == "true"){
+    }
+})
+
+object TestFront: BuildType({
+    name = "Frontend test"
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+    steps{
+        script {
+            id = "Frontend Test"
+            scriptContent = """echo "Frontend has been tested!""""
+        }
+    }
+})
+
+object BackendTest: BuildType({
+    name = "Backend test"
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+    steps{
+        script {
+            id = "Backend Test"
+            scriptContent = """echo "Backend has been tested!""""
+        }
+    }
+})
+
+object Deploy: BuildType({
+    name = "Deploy"
+    params {
+        param("TestVar", "true")
+    }
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+    steps{
+        if ("true" == "%TestVar%"){
             script {
                 id = "script run"
                 scriptContent = """echo "Runner True step!""""

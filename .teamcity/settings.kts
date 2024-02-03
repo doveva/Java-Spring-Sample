@@ -31,6 +31,10 @@ version = "2023.11"
 
 project {
     description = "Test Java pipeline"
+    buildType(Build)
+    buildType(TestFront)
+    buildType(BackendTest)
+    buildType(Deploy)
     sequential{
         buildType(Build)
         parallel {

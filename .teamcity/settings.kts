@@ -30,8 +30,6 @@ project {
     description = "Test Java pipeline"
 
     buildType(DeployTest)
-
-    template(Docker)
 }
 
 object DeployTest : BuildType({
@@ -41,27 +39,12 @@ object DeployTest : BuildType({
     vcs {
         root(DslContext.settingsRoot)
     }
-})
-
-object Docker : Template({
-    name = "Docker"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
 
     steps {
-        dockerCommand {
-            name = "Build"
-            id = "Build"
-            commandType = build {
-                source = file {
-                    path = "Dockerfile"
-                }
-                platform = DockerCommandStep.ImagePlatform.Linux
-                namesAndTags = "springtest:latest"
-                commandArgs = "--pull"
-            }
+        gradle {
+            name = "Gradle Build"
+            id = "__NEW_RUNNER__"
+            tasks = "bootJar"
         }
     }
 })

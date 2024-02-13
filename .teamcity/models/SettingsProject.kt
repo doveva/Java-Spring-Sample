@@ -1,8 +1,5 @@
 package models
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 open class SettingsProject (val name: String?, val description: String = "Test Description") {
 
     fun testFun(): String{

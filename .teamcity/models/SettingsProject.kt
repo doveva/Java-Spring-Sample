@@ -1,6 +1,8 @@
 package models
 
-open class SettingsProject (val name: String?, val description: String = "Test Description") {
+open class SettingsProject{
+    var name: String? = null
+    var description: String = "Test Description"
 
     fun testFun(): String{
         if (name == null){

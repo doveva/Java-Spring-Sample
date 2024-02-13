@@ -29,9 +29,9 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 
 version = "2023.11"
 
-val projects = Json.decodeFromString<Settings>(File("./test.json").toString())
-
 object MyProject: Project({
+    val projects = Json.decodeFromString<Settings>(File("./test.json").toString())
+
     name = if (projects.name == null) "Default Name" else projects.name!!
     description = projects.description
     buildType(Build)

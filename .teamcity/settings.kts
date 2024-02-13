@@ -2,7 +2,7 @@ import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildSteps.gradle
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
-import kotlinx.serialization.json.Json
+import com.google.gson.*
 import java.io.File
 import models.SettingsProject
 /*
@@ -30,7 +30,8 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2023.11"
 
 object MyProject: Project({
-    val projects = Json.decodeFromString(SettingsProject.serializer() ,File("./test.json").toString())
+    val gson = Gson()
+    val projects = gson.fromJson(File("./test.json").toString(), SettingsProject::class.java)
 
     name = projects.name ?: "Default Name"
     description = projects.description

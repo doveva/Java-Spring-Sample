@@ -43,8 +43,11 @@
         <artifactId>kotlin-maven-plugin</artifactId>
         <groupId>org.jetbrains.kotlin</groupId>
         <version>${kotlin.version}</version>
-
-        <configuration/>
+        <configuration>
+          <compilerPlugins>
+            <plugin>kotlinx-serialization</plugin>
+          </compilerPlugins>
+        </configuration>
         <executions>
           <execution>
             <id>compile</id>
@@ -61,6 +64,13 @@
             </goals>
           </execution>
         </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-maven-serialization</artifactId>
+            <version>${kotlin.version}</version>
+          </dependency>
+        </dependencies>
       </plugin>
       <plugin>
         <groupId>org.jetbrains.teamcity</groupId>
@@ -71,7 +81,6 @@
           <dstDir>target/generated-configs</dstDir>
         </configuration>
       </plugin>
-
     </plugins>
   </build>
 

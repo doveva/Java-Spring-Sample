@@ -4,7 +4,7 @@ import jetbrains.buildServer.configs.kotlin.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 import kotlinx.serialization.json.Json
 import java.io.File
-import models.Settings
+import models.SettingsProject
 /*
 The settings script is an entry point for defining a TeamCity
 project hierarchy. The script should contain a single call to the
@@ -30,9 +30,9 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2023.11"
 
 object MyProject: Project({
-    val projects = Json.decodeFromString<Settings>(File("./test.json").toString())
+    val projects = Json.decodeFromString<SettingsProject>(File("./test.json").toString())
 
-    name = if (projects.name == null) "Default Name" else projects.name!!
+    name = projects.name ?: "Default Name"
     description = projects.description
     buildType(Build)
     buildType(TestFront)

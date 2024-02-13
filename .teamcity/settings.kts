@@ -31,7 +31,7 @@ version = "2023.11"
 
 object MyProject: Project({
     val gson = Gson()
-    val projects = gson.fromJson(File("./test.json").toString(), SettingsProject::class.java)
+    val projects = gson.fromJson(File("./test.json").readText(), SettingsProject::class.java)
 
     name = projects.name ?: "Default Name"
     description = projects.description

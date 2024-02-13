@@ -30,7 +30,7 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2023.11"
 
 object MyProject: Project({
-    val projects = Json.decodeFromString<SettingsProject>(File("./test.json").toString())
+    val projects = Json.decodeFromString(SettingsProject.serializer() ,File("./test.json").toString())
 
     name = projects.name ?: "Default Name"
     description = projects.description

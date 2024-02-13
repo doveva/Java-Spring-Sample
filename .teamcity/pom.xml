@@ -71,6 +71,7 @@
           <dstDir>target/generated-configs</dstDir>
         </configuration>
       </plugin>
+
     </plugins>
   </build>
 
@@ -99,6 +100,11 @@
       <artifactId>kotlin-script-runtime</artifactId>
       <version>${kotlin.version}</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jetbrains.kotlinx</groupId>
+      <artifactId>kotlinx-serialization-json</artifactId>
+      <version>1.6.2</version>
     </dependency>
   </dependencies>
 </project>

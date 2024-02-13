@@ -1,6 +1,4 @@
 import jetbrains.buildServer.configs.kotlin.*
-import jetbrains.buildServer.configs.kotlin.buildSteps.DockerCommandStep
-import jetbrains.buildServer.configs.kotlin.buildSteps.dockerCommand
 import jetbrains.buildServer.configs.kotlin.buildSteps.gradle
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
@@ -29,15 +27,15 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 
 version = "2023.11"
 
-project {
-    description = "Test Java pipeline"
+object MyProkect: Project({
+    name = "Main"
+    description = "The main branch"
     buildType(Build)
     buildType(TestFront)
     buildType(BackendTest)
     buildType(DeployQA)
     buildType(DeployProd)
     buildType(Finalize)
-
     params{
         param("QaDeploy", "false")
     }
@@ -55,7 +53,14 @@ project {
         }
         buildType(Finalize)
     }
-    template(Docker)
+})
+
+project {
+
+
+    description = "Test Java pipeline"
+
+    subProject(MyProkect)
 }
 
 object Build : BuildType({
@@ -142,29 +147,6 @@ object Finalize: BuildType({
     }
     triggers{
         vcs {
-        }
-    }
-})
-
-object Docker : Template({
-    name = "Docker"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        dockerCommand {
-            name = "Build"
-            id = "Build"
-            commandType = build {
-                source = file {
-                    path = "Dockerfile"
-                }
-                platform = DockerCommandStep.ImagePlatform.Linux
-                namesAndTags = "springtest:latest"
-                commandArgs = "--pull"
-            }
         }
     }
 })

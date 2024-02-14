@@ -3,6 +3,7 @@ import jetbrains.buildServer.configs.kotlin.buildSteps.gradle
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 import com.google.gson.*
+import jetbrains.buildServer.configs.kotlin.vcs.GitVcsRoot
 import java.io.File
 import models.SettingsProject
 /*
@@ -29,6 +30,15 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 
 version = "2023.11"
 
+object VCS: GitVcsRoot({
+    name = "Kotlin Test Repo"
+    url = "git@github.com:doveva/KotlinSpringSample.git"
+    branch = "refs/heads/main"
+    authMethod = uploadedKey{
+        uploadedKey = "Token for Kotlin Repo"
+    }
+})
+
 object MyProject: Project({
     val gson = Gson()
     val projects = gson.fromJson(File("./test.json").readText(), SettingsProject::class.java)
@@ -41,8 +51,6 @@ object MyProject: Project({
     buildType(DeployQA)
     buildType(DeployProd)
     buildType(Finalize)
-
-
 
     params{
         param("QaDeploy", "false")
@@ -63,10 +71,16 @@ object MyProject: Project({
     }
 })
 
+object MySecondProject:Project({
+    name = "Test Project"
+    description = "Project that doesn't contain anything"
+    vcsRoot(VCS)
+})
+
 project {
     description = "Test Java pipeline"
 
-    subProject(MyProject)
+    subProjects(MyProject, MySecondProject)
 }
 
 object Build : BuildType({
